@@ -3,6 +3,7 @@
 This is an exercise for testing a webapp with Selenium and Python.
 The project is written in POM (Page Object Model) architecture.
 
+```
 BaseProject
 │
 ├── pages
@@ -15,6 +16,7 @@ BaseProject
 ├── conftest.py
 ├── requirements.txt
 └── README.md
+```
 
 ## Requirements
 - Python 3.10 or higher
