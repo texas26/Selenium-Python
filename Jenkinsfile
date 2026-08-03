@@ -12,7 +12,7 @@ pipeline {
             steps {
                 sh '''
                     python3 -m venv .venv
-                    source .venv/bin/activate
+                    . .venv/bin/activate
                     pip install -U pip
                     pip install -r requirements.txt
                 '''
@@ -21,26 +21,26 @@ pipeline {
 
         stage('Run tests') {
             parallel {
-                chrome: {
+                stage('chrome') {
                     steps {
                         sh '''
-                            source .venv/bin/activate
+                            . .venv/bin/activate
                             BROWSER=chrome pytest -v --junitxml=jenkins/test-results-chrome.xml
                         '''
                     }
                 }
-                firefox: {
+                stage('firefox') {
                     steps {
                         sh '''
-                            source .venv/bin/activate
+                            . .venv/bin/activate
                             BROWSER=firefox pytest -v --junitxml=jenkins/test-results-firefox.xml
                         '''
                     }
                 }
-                headless: {
+                stage('headless') {
                     steps {
                         sh '''
-                            source .venv/bin/activate
+                            . .venv/bin/activate
                             BROWSER=headless pytest -v --junitxml=jenkins/test-results-headless.xml
                         '''
                     }
