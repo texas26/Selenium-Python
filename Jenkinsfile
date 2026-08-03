@@ -20,19 +20,39 @@ pipeline {
         }
 
         stage('Run tests') {
-            steps {
-                sh '''
-                    source .venv/bin/activate
-                    pytest -v --junitxml=jenkins/test-results.xml
-                '''
+            parallel {
+                chrome: {
+                    steps {
+                        sh '''
+                            source .venv/bin/activate
+                            BROWSER=chrome pytest -v --junitxml=jenkins/test-results-chrome.xml
+                        '''
+                    }
+                }
+                firefox: {
+                    steps {
+                        sh '''
+                            source .venv/bin/activate
+                            BROWSER=firefox pytest -v --junitxml=jenkins/test-results-firefox.xml
+                        '''
+                    }
+                }
+                headless: {
+                    steps {
+                        sh '''
+                            source .venv/bin/activate
+                            BROWSER=headless pytest -v --junitxml=jenkins/test-results-headless.xml
+                        '''
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            junit 'jenkins/test-results.xml'
-            archiveArtifacts artifacts: 'jenkins/test-results.xml', fingerprint: true
+            junit 'jenkins/test-results-*.xml'
+            archiveArtifacts artifacts: 'jenkins/test-results-*.xml', fingerprint: true
         }
     }
 }
