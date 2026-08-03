@@ -1,11 +1,12 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from pages.base_page import BasePage
+from constants import *
 
 
 class CarbohydrateCalculatorPage(BasePage):
 
-    URL = "https://www.calculator.net/calorie-calculator.html"
+    URL = BASE_URL
 
     METRIC = (By.LINK_TEXT, "Metric Units")
     US = (By.LINK_TEXT, "US Units")

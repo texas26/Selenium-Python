@@ -10,6 +10,9 @@ BaseProject
 │     ├── base_page.py
 │     └── carbohydrate_calculator_page.py
 │
+│── constants
+│     └── constants.py
+│
 ├── tests
 │     └── test_carbohydrate_calculator.py
 │
@@ -19,13 +22,13 @@ BaseProject
 ```
 
 ## Requirements
-- Python 3.10 or higher
+- Python 3.9 or higher
 
 ## Installation
 
 1. Create and activate virtual environment:
 ```bash
-python3 -m venv venv
+python3 -m venv .venv
 source venv/bin/activate
 ```
 
