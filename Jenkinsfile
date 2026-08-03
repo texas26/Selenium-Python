@@ -1,47 +1,45 @@
 pipeline {
-    agent any
+    agent any  // <-- Set agent globally so post block has a node context
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Install dependencies') {
-            steps {
-                sh '''
-                    python3 -m venv .venv
-                    . .venv/bin/activate
-                    pip install -U pip
-                    pip install -r requirements.txt
-                '''
-            }
-        }
-
-        stage('Run tests') {
+        stage('Run Parallel Tests') {
             parallel {
-                stage('chrome') {
+                stage('Chrome') {
                     steps {
+                        checkout scm
                         sh '''
-                            . .venv/bin/activate
-                            BROWSER=chrome pytest -v --junitxml=jenkins/test-results-chrome.xml
+                            python3 -m venv .venv
+                            source .venv/bin/activate
+                            pip install -U pip
+                            pip install -r requirements.txt
+                            
+                            BROWSER=chrome pytest -v --html=report-chrome.html --self-contained-html
                         '''
                     }
                 }
-                stage('firefox') {
+                stage('Firefox') {
                     steps {
+                        checkout scm
                         sh '''
-                            . .venv/bin/activate
-                            BROWSER=firefox pytest -v --junitxml=jenkins/test-results-firefox.xml
+                            python3 -m venv .venv
+                            source .venv/bin/activate
+                            pip install -U pip
+                            pip install -r requirements.txt
+                            
+                            BROWSER=firefox pytest -v --html=report-firefox.html --self-contained-html
                         '''
                     }
                 }
-                stage('headless') {
+                stage('Headless') {
                     steps {
+                        checkout scm
                         sh '''
-                            . .venv/bin/activate
-                            BROWSER=headless pytest -v --junitxml=jenkins/test-results-headless.xml
+                            python3 -m venv .venv
+                            source .venv/bin/activate
+                            pip install -U pip
+                            pip install -r requirements.txt
+                            
+                            BROWSER=headless pytest -v --html=report-headless.html --self-contained-html
                         '''
                     }
                 }
@@ -51,8 +49,7 @@ pipeline {
 
     post {
         always {
-            junit 'jenkins/test-results-*.xml'
-            archiveArtifacts artifacts: 'jenkins/test-results-*.xml', fingerprint: true
+            archiveArtifacts artifacts: 'report-*.html', allowEmptyArchive: true, fingerprint: true
         }
     }
 }
