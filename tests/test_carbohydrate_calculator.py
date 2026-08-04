@@ -69,7 +69,7 @@ def test_weight_zero(driver):
     assert page.invalid_input_error(ERROR_POSITIVE_WEIGHT)
 
 
-def test_weight_alpha(driver):
+def test_weight_invalid(driver):
 
     page = CarbohydrateCalculatorPage(driver)
     page.open()

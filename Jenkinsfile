@@ -1,5 +1,5 @@
 pipeline {
-    agent any  // <-- Set agent globally so post block has a node context
+    agent any 
 
     stages {
         stage('Run Parallel Tests') {
